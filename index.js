@@ -107,7 +107,7 @@ var Swipeout = React.createClass({
     return true;
   }
 , _handleMoveShouldSetPanResponder: function(e: Object, gestureState: Object): boolean {
-    if (gestureState.dx === 0 || gestureState.dy === 0) {
+    if (Math.abs(gestureState.dx) < 2 || Math.abs(gestureState.dy) < 2) {
       return false;
     }
     return true;
@@ -217,6 +217,13 @@ var Swipeout = React.createClass({
       openedLeft: false,
     })
   }
+, _onLayout: function(event) {
+    var { width, height } = event.nativeEvent.layout;
+    this.setState({
+      contentWidth: width,
+      contentHeight: height,
+    })
+  }
 , render: function() {
     var self = this
     var contentWidth = self.state.contentWidth
@@ -260,7 +267,7 @@ var Swipeout = React.createClass({
 
     return (
       <View style={styleSwipeout}>
-        <View ref="swipeoutContent" style={styleContent} {...self._panResponder.panHandlers}>
+        <View ref="swipeoutContent" style={styleContent} {...self._panResponder.panHandlers} onLayout={this._onLayout}>
           {self.props.children}
         </View>
         {self.props.right && posX < 0 ?
