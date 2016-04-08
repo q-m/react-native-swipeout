@@ -5,7 +5,6 @@ var styles = StyleSheet.create({
   swipeout: {
     backgroundColor: '#dbddde',
     flex: 1,
-    overflow: 'hidden',
   },
   swipeoutBtnTouchable: {
     flex: 1,
