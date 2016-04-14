@@ -70,7 +70,6 @@ var Swipeout = React.createClass({
   mixins: [tweenState.Mixin]
 , getDefaultProps: function() {
     return {
-      onOpen: function(sectionID, rowID) {console.log('onOpen: '+sectionID+" "+rowID)},
       rowID: -1,
       sectionID: -1,
     }
@@ -93,7 +92,7 @@ var Swipeout = React.createClass({
 , componentWillMount: function() {
     this._panResponder = PanResponder.create({
       onStartShouldSetPanResponder: (event, gestureState) => true,
-      onMoveShouldSetPanResponder: (event, gestureState) => true,
+      onMoveShouldSetPanResponder: (event, gestureState) => !(gestureState.dx === 0 || gestureState.dy === 0),
       onPanResponderGrant: this._handlePanResponderGrant,
       onPanResponderMove: this._handlePanResponderMove,
       onPanResponderRelease: this._handlePanResponderEnd,
@@ -105,7 +104,9 @@ var Swipeout = React.createClass({
     if (nextProps.close) this._close()
   }
 , _handlePanResponderGrant: function(e: Object, gestureState: Object) {
-    this.props.onOpen(this.props.sectionID, this.props.rowID)
+    if(this.props.onOpen){
+      this.props.onOpen(this.props.sectionID, this.props.rowID)
+    }
     this.refs.swipeoutContent.measure((ox, oy, width, height) => {
       this.setState({
         btnWidth: (width/5),
@@ -219,24 +220,24 @@ var Swipeout = React.createClass({
     var limit = -this.state.btnsRightWidth
     if (posX > 0) var limit = this.state.btnsLeftWidth
 
-    var styleLeftPos = StyleSheet.create({
+    var styleLeftPos = {
       left: {
         left: 0,
         overflow: 'hidden',
         width: Math.min(limit*(posX/limit), limit),
       }
-    })
-    var styleRightPos = StyleSheet.create({
+    }
+    var styleRightPos = {
       right: {
         left: Math.abs(contentWidth + Math.max(limit, posX)),
         right: 0,
       }
-    })
-    var styleContentPos = StyleSheet.create({
+    }
+    var styleContentPos = {
       content: {
         left: this._rubberBandEasing(posX, limit),
       }
-    })
+    }
 
     var styleContent = [styles.swipeoutContent]
     styleContent.push(styleContentPos.content)
