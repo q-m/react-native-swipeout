@@ -87,7 +87,7 @@ var Swipeout = React.createClass({
       contentWidth: 0,
       openedRight: false,
       swiping: false,
-      tweenDuration: 160,
+      tweenDuration: 240,
       timeStart: null,
     }
   }
@@ -187,7 +187,7 @@ var Swipeout = React.createClass({
 , _tweenContent: function(state, endValue) {
     this.tweenState(state, {
       easing: tweenState.easingTypes.easeInOutQuad,
-      duration: endValue === 0 ? this.state.tweenDuration*1.5 : this.state.tweenDuration,
+      duration: this.state.tweenDuration,
       endValue: endValue
     })
   }
