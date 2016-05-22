@@ -2,8 +2,10 @@ var React = require('react-native')
 var tweenState = require('react-tween-state')
 var {PanResponder, TouchableHighlight, StyleSheet, Text, View} = React
 var styles = require('./styles.js')
+import TimerMixin from 'react-timer-mixin';
 
 var SwipeoutBtn = React.createClass({
+  mixins: [TimerMixin],
   getDefaultProps: function() {
     return {
       backgroundColor: null,
@@ -67,7 +69,7 @@ var SwipeoutBtn = React.createClass({
 })
 
 var Swipeout = React.createClass({
-  mixins: [tweenState.Mixin]
+  mixins: [tweenState.Mixin, TimerMixin]
 , getDefaultProps: function() {
     return {
       rowID: -1,
@@ -85,7 +87,7 @@ var Swipeout = React.createClass({
       contentWidth: 0,
       openedRight: false,
       swiping: false,
-      tweenDuration: 160,
+      tweenDuration: 240,
       timeStart: null,
     }
   }
@@ -185,7 +187,7 @@ var Swipeout = React.createClass({
 , _tweenContent: function(state, endValue) {
     this.tweenState(state, {
       easing: tweenState.easingTypes.easeInOutQuad,
-      duration: endValue === 0 ? this.state.tweenDuration*1.5 : this.state.tweenDuration,
+      duration: this.state.tweenDuration,
       endValue: endValue
     })
   }
@@ -207,6 +209,24 @@ var Swipeout = React.createClass({
       openedRight: false,
       openedLeft: false,
     })
+  }
+//  show the left buttons, then hide them again
+, _animate: function() {
+    this.refs.swipeoutContent.measure((ox, oy, width, height) => {
+      var btnWidth = width/5
+      var btnsLeftWidth = width/5*this.props.left.length;
+      this.setState({
+        btnWidth: btnWidth,
+        btnsLeftWidth: btnsLeftWidth
+      });
+      this._tweenContent('contentPos', btnsLeftWidth);
+      this.setState({ contentPos: btnsLeftWidth, openedLeft: true, openedRight: false });
+    });
+    // close the left buttons after the buttons are shown for a while
+    this.setTimeout(
+      () => { this._close() },
+      320
+    );
   }
 , render: function() {
     var contentWidth = this.state.contentWidth
