@@ -1,8 +1,11 @@
 var React = require('react-native')
 var tweenState = require('react-tween-state')
-var {PanResponder, TouchableHighlight, StyleSheet, Text, View} = React
+var {PanResponder, Platform, TouchableHighlight, StyleSheet, Text, View} = React
 var styles = require('./styles.js')
 import TimerMixin from 'react-timer-mixin';
+
+// set swipeout threshold for Android
+const swipeTreshold = (Platform.OS === 'ios') ? 0 : 10;
 
 var SwipeoutBtn = React.createClass({
   mixins: [TimerMixin],
@@ -94,12 +97,12 @@ var Swipeout = React.createClass({
 , componentWillMount: function() {
     this._panResponder = PanResponder.create({
       onStartShouldSetPanResponder: (event, gestureState) => true,
-      onMoveShouldSetPanResponder: (event, gestureState) => !(gestureState.dx === 0 || gestureState.dy === 0),
+      onMoveShouldSetPanResponder: (event, gestureState) => Math.abs(gestureState.dx) > swipeTreshold,
       onPanResponderGrant: this._handlePanResponderGrant,
       onPanResponderMove: this._handlePanResponderMove,
       onPanResponderRelease: this._handlePanResponderEnd,
       onPanResponderTerminate: this._handlePanResponderEnd,
-      onShouldBlockNativeResponder: (event, gestureState) => true,
+      onShouldBlockNativeResponder: (event, gestureState) => false,
     });
   }
 , componentWillReceiveProps: function(nextProps) {
