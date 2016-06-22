@@ -4,14 +4,15 @@
  */
 'use strict';
 
-var React = require('react-native');
+var React = require('react');
+var ReactNative = require('react-native');
 var {
   AppRegistry,
   StyleSheet,
   ListView,
   Text,
   View,
-} = React;
+} = ReactNative;
 
 //  include react-native-swipeout
 var Swipeout = require('./index.js')

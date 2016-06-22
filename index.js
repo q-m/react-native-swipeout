@@ -1,6 +1,14 @@
-var React = require('react-native')
+
+var React = require('react');
+var ReactNative = require('react-native');
+var {
+  PanResponder,
+  TouchableHighlight,
+  StyleSheet,
+  Text,
+  View
+} = ReactNative;
 var tweenState = require('react-tween-state')
-var {PanResponder, TouchableHighlight, StyleSheet, Text, View} = React
 var styles = require('./styles.js')
 import TimerMixin from 'react-timer-mixin';
 
