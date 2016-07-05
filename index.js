@@ -5,7 +5,7 @@ var styles = require('./styles.js')
 import TimerMixin from 'react-timer-mixin';
 
 // set swipeout threshold for Android
-const swipeTreshold = (Platform.OS === 'ios') ? 0 : 10;
+const swipeTreshold = (Platform.OS === 'ios') ? 0 : 30;
 
 var SwipeoutBtn = React.createClass({
   mixins: [TimerMixin],
